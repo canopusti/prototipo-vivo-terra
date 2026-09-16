@@ -3,110 +3,695 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movistar Store - Login</title>
+    <title>Terra Vivo - Painel Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#019DF4', // Movistar Blue
-                        secondary: '#5BC500', // Green button
-                        dark: '#333333',
-                        lightbg: '#F3F4F6'
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
-        body { font-family: 'Segoe UI', system-ui, sans-serif; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-        }
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: #F3F4F6; }
+        [x-cloak] { display: none !important; }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #4B5563; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-100 to-gray-300 min-h-screen flex flex-col items-center justify-center p-4">
-
-    <!-- Logo top -->
-    <div class="mb-8">
-        <h1 class="text-4xl font-light text-primary tracking-wide bg-white px-6 py-2 rounded shadow-sm">
-            Movistar <span class="font-semibold italic">Store</span>
-        </h1>
-    </div>
-
-    <!-- Login Card -->
-    <div class="glass-card w-full max-w-md rounded-2xl p-8 transition-transform duration-300 hover:shadow-xl">
-        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-8">Terra Networks</h2>
-
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <!-- User ID -->
-            <div class="mb-5 relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fas fa-user text-gray-400"></i>
-                </div>
-                <input type="text" id="userId" 
-                    class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-yellow-50"
-                    placeholder="ID do Usuário" value="81021595" required>
+<body x-data="{ currentView: 'login', sidebarOpen: true }">
+    
+    <!-- Login View -->
+    <div x-show="currentView === 'login'" x-cloak class="fixed inset-0 z-50 bg-gray-900">
+        
+    <div class="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-50" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'); background-size: cover; background-position: center;">
+        <div class="absolute inset-0 bg-indigo-900 opacity-80 mix-blend-multiply"></div>
+        <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden z-10">
+            <div class="bg-indigo-600 p-6 text-center">
+                <h1 class="text-3xl font-bold text-white tracking-wider">TERRA <span class="font-light">VIVO</span></h1>
+                <p class="text-indigo-200 text-sm mt-2">Painel de Gerenciamento</p>
             </div>
-
-            <!-- Password -->
-            <div class="mb-4 relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fas fa-lock text-gray-400"></i>
-                </div>
-                <input type="password" id="password" 
-                    class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-yellow-50"
-                    placeholder="Senha" value="............." required>
-            </div>
-
-            <!-- Checkbox -->
-            <div class="flex items-center justify-center mb-6">
-                <input type="checkbox" id="usuarioTerra" class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary">
-                <label for="usuarioTerra" class="ml-2 text-sm text-gray-600 cursor-pointer">Usuario Terra</label>
-            </div>
-
-            <hr class="border-gray-200 mb-6">
-
-            <!-- Captcha Area -->
-            <div class="flex flex-col items-center mb-6">
-                <div class="bg-gray-100 px-8 py-3 rounded tracking-widest text-2xl font-bold text-gray-700 relative overflow-hidden mb-2 select-none" style="font-family: 'Courier New', Courier, monospace; letter-spacing: 0.3em;">
-                    <!-- Fake noise lines -->
-                    <div class="absolute inset-0 flex items-center justify-center opacity-30">
-                        <svg width="100%" height="100%"><path d="M0,20 Q50,40 100,10 T150,30" stroke="black" fill="none" stroke-width="2"/></svg>
+            <div class="p-8">
+                <form @submit.prevent="login()">
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ID do Usuário</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <input type="text" class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900" placeholder="81021595" value="81021595">
+                        </div>
                     </div>
-                    C<span class="text-gray-500">A</span>A<span class="text-gray-800">D</span>A
-                </div>
-                <label class="text-sm text-gray-600 font-medium mb-3">Código de Seguridad</label>
-                <input type="text" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-center focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all"
-                    placeholder="Insira o código acima">
-            </div>
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Senha</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input type="password" class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900" placeholder="••••••••" value="password">
+                        </div>
+                    </div>
+                    <div class="flex items-center mb-6">
+                        <input type="checkbox" id="userTerra" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
+                        <label for="userTerra" class="ml-2 text-sm text-gray-600">Usuário Rede Terra</label>
+                    </div>
+                    
+                    <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">Validação de Segurança</label>
+                        <div class="text-center font-mono text-2xl font-bold tracking-[0.3em] text-indigo-800 bg-white py-2 rounded border border-gray-200 mb-3 select-none">
+                            X7<span class="text-gray-400">A</span>9<span class="text-indigo-400">Q</span>
+                        </div>
+                        <input type="text" class="w-full text-center px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Digite o código">
+                    </div>
 
-            <!-- Submit Button -->
-            <button type="submit" 
-                class="w-full bg-secondary hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 flex justify-center items-center gap-2">
-                <span>Ingresar</span>
-                <i class="fas fa-sign-in-alt"></i>
-            </button>
-        </form>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow transition-colors flex justify-center items-center gap-2">
+                        <span>Acessar Painel</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     </div>
 
-    <script>
-        function handleLogin(e) {
-            e.preventDefault();
-            // Simple visual effect before redirecting
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalHtml = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Entrando...';
-            btn.disabled = true;
+    <!-- Main App Layout -->
+    <div x-show="currentView !== 'login'" x-cloak class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="bg-gray-900 text-white w-64 flex-shrink-0 flex flex-col transition-transform duration-300 shadow-2xl relative z-20"
+               :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen, 'absolute': true, 'md:relative': true, 'md:translate-x-0': sidebarOpen}">
             
+            <div class="h-16 flex items-center px-6 bg-gray-950 border-b border-gray-800">
+                <h1 class="text-xl font-bold tracking-wider">TERRA <span class="text-indigo-400 font-light">VIVO</span></h1>
+            </div>
+
+            <div class="p-6 border-b border-gray-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-900/50">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400">Administrador</p>
+                        <p class="text-sm font-semibold truncate">81021595</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto sidebar-scroll py-4">
+
+                <div class="px-4 mb-2">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Conteúdos</p>
+                    <ul class="space-y-1">
+
+                        <li>
+                            <button @click="currentView = 'home'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'home' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-file-alt w-4 text-center opacity-70"></i>
+                                    Lista de Serviços
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'novo-pno'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'novo-pno' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-file-alt w-4 text-center opacity-70"></i>
+                                    Novo PNO
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'edicao-pno'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'edicao-pno' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-file-alt w-4 text-center opacity-70"></i>
+                                    Edição PNO
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'documentacao'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'documentacao' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-file-alt w-4 text-center opacity-70"></i>
+                                    Documentação
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'multimidia'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'multimidia' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-file-alt w-4 text-center opacity-70"></i>
+                                    Multimídia
+                                </span>
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="px-4 mb-2">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Categorias</p>
+                    <ul class="space-y-1">
+
+                        <li>
+                            <button @click="currentView = 'categorias-loja'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'categorias-loja' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-tags w-4 text-center opacity-70"></i>
+                                    Loja
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'categorias-pno'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'categorias-pno' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-tags w-4 text-center opacity-70"></i>
+                                    PNO
+                                </span>
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="px-4 mb-2">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Publicidade</p>
+                    <ul class="space-y-1">
+
+                        <li>
+                            <button @click="currentView = 'banners-lista'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'banners-lista' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-bullhorn w-4 text-center opacity-70"></i>
+                                    Lista de Banners
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'banner-novo'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'banner-novo' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-bullhorn w-4 text-center opacity-70"></i>
+                                    Novo Banner
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'carrossel'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'carrossel' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-bullhorn w-4 text-center opacity-70"></i>
+                                    Carrossel
+                                </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button @click="currentView = 'ofertas'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === 'ofertas' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="fas fa-bullhorn w-4 text-center opacity-70"></i>
+                                    Ofertas
+                                </span>
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </nav>
+            <div class="p-4 bg-gray-950">
+                <button @click="currentView = 'login'" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
+                    <i class="fas fa-sign-out-alt"></i> Sair do Sistema
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden relative z-10" :class="{'md:ml-0': sidebarOpen}">
+            
+            <!-- Topbar -->
+            <header class="h-16 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                    <!-- Breadcrumbs (Mocked) -->
+                    <div class="hidden md:flex items-center text-sm text-gray-500">
+                        <span>Painel Admin</span>
+                        <i class="fas fa-chevron-right text-xs mx-2 text-gray-300"></i>
+                        <span class="text-indigo-600 font-medium" x-text="currentView.replace('-', ' ').toUpperCase()"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-gray-400 hover:text-indigo-600 relative p-2">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Workspace -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 lg:p-8">
+                <div class="max-w-7xl mx-auto">
+
+                    <div x-show="currentView === 'home'" x-cloak x-transition.opacity.duration.300ms>
+                        
+    <div class="mb-6 flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-gray-800">Serviços <span class="text-gray-400 font-normal">| Conteúdos</span></h2>
+        <button @click="currentView = 'novo-pno'" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow shadow-indigo-200 font-medium flex items-center gap-2 transition-colors">
+            <i class="fas fa-plus"></i> Adicionar Serviço
+        </button>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Código PNO</label>
+                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Ex: 63652">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Nome do Serviço</label>
+                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Buscar...">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Fornecedor</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option>Todos os fornecedores</option>
+                    <option>Terra Networks</option>
+                    <option>Digital Virgo</option>
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors flex justify-center items-center gap-2">
+                    <i class="fas fa-search"></i> Filtrar Resultados
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <span class="text-sm text-gray-500 font-medium">Mostrando 5 de 50 registros</span>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-white">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">PNO</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Serviço</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Fornecedor</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Cód. Integração</th>
+                        <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">63652</td>
+                        <td class="px-6 py-4 text-sm text-gray-900 font-medium">Vale Saúde Farma</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Terra Networks</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">20260915142131</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-700">Inativo</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button @click="currentView = 'edicao-pno'" class="text-gray-400 hover:text-indigo-600 transition-colors p-2" title="Editar"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">63650</td>
+                        <td class="px-6 py-4 text-sm text-gray-900 font-medium">Teatrix Premium</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Digital Virgo</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">20260910210857</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-700">Ativo</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button @click="currentView = 'edicao-pno'" class="text-gray-400 hover:text-indigo-600 transition-colors p-2" title="Editar"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">63648</td>
+                        <td class="px-6 py-4 text-sm text-gray-900 font-medium">Amazon Prime Fixa</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Terra Networks</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-mono">20260828142952</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-700">Ativo</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button @click="currentView = 'edicao-pno'" class="text-gray-400 hover:text-indigo-600 transition-colors p-2" title="Editar"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+                    </div>
+
+                    <div x-show="currentView === 'novo-pno'" x-cloak x-transition.opacity.duration.300ms>
+                        
+    <div class="mb-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <button @click="currentView = 'home'" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors shadow-sm">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-2xl font-bold text-gray-800">Criar Novo Serviço <span class="text-gray-400 font-normal">| PNO</span></h2>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-8 py-6 border-b border-gray-100 bg-gray-50">
+            <h3 class="text-lg font-semibold text-gray-700">Informações Básicas</h3>
+            <p class="text-sm text-gray-500">Preencha os dados do novo conteúdo.</p>
+        </div>
+        
+        <div class="p-8">
+            <form class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Código PNO</label>
+                        <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-100 text-gray-500 cursor-not-allowed" value="Gerado automaticamente" disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nome do Serviço <span class="text-red-500">*</span></label>
+                        <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Ex: Globoplay Premium">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Fornecedor <span class="text-red-500">*</span></label>
+                        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="">Selecione...</option>
+                            <option>Terra Networks</option>
+                            <option>Digital Virgo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Classificação</label>
+                        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="">Selecione...</option>
+                            <option>Entretenimento</option>
+                            <option>Educação</option>
+                            <option>Esportes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">URL da Fonte / Origem</label>
+                    <input type="url" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="https://...">
+                </div>
+
+                <div class="pt-4 pb-2 border-t border-gray-100">
+                    <label class="block text-sm font-semibold text-gray-700 mb-4">Plataformas Suportadas</label>
+                    <div class="flex flex-wrap gap-6">
+                        <label class="flex items-center gap-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded">
+                            <span class="text-gray-700 font-medium"><i class="fas fa-desktop text-gray-400 mr-1"></i> Web / Desktop</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded">
+                            <span class="text-gray-700 font-medium"><i class="fab fa-android text-green-500 mr-1"></i> Android</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" class="w-5 h-5 text-indigo-600 rounded">
+                            <span class="text-gray-700 font-medium"><i class="fab fa-apple text-gray-800 mr-1"></i> iOS</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center mt-2 p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+                    <input type="checkbox" id="ativo" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" checked>
+                    <label for="ativo" class="ml-3 text-indigo-900 font-semibold cursor-pointer">Ativar este serviço imediatamente após salvar</label>
+                </div>
+
+                <div class="pt-6 flex justify-end gap-4 border-t border-gray-100">
+                    <button type="button" @click="currentView = 'home'" class="px-6 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="button" @click="currentView = 'home'" class="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-colors flex items-center gap-2">
+                        <i class="fas fa-save"></i> Salvar e Continuar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+                    </div>
+
+                    <div x-show="currentView === 'edicao-pno'" x-cloak x-transition.opacity.duration.300ms>
+                        
+    <div class="mb-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <button @click="currentView = 'home'" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors shadow-sm">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="text-2xl font-bold text-gray-800">Editar Serviço <span class="text-gray-400 font-normal">| Teatrix Premium</span></h2>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-8 py-6 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-700">Edição de Dados</h3>
+                <p class="text-sm text-gray-500">PNO #63650</p>
+            </div>
+            <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full uppercase tracking-wider">Ativo</span>
+        </div>
+        
+        <div class="p-8">
+            <form class="space-y-6">
+                <!-- Similar form to Novo PNO, but pre-filled -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Código PNO</label>
+                        <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 bg-gray-100 text-gray-500 cursor-not-allowed" value="63650" disabled>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nome do Serviço</label>
+                        <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none" value="Teatrix Premium">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Fornecedor</label>
+                        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option>Terra Networks</option>
+                            <option selected>Digital Virgo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Classificação</label>
+                        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option>Entretenimento</option>
+                            <option selected>Streaming & Teatro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-6 flex justify-end gap-4 border-t border-gray-100">
+                    <button type="button" @click="currentView = 'home'" class="px-6 py-2.5 border border-red-300 text-red-600 font-medium rounded-lg hover:bg-red-50 transition-colors mr-auto">
+                        Inativar Serviço
+                    </button>
+                    <button type="button" @click="currentView = 'home'" class="px-6 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="button" @click="currentView = 'home'" class="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-colors flex items-center gap-2">
+                        <i class="fas fa-check"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+                    </div>
+
+                    <div x-show="currentView === 'banners-lista'" x-cloak x-transition.opacity.duration.300ms>
+                        
+    <div class="mb-6 flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-gray-800">Publicidade <span class="text-gray-400 font-normal">| Gerenciar Banners</span></h2>
+        <button @click="currentView = 'banner-novo'" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow shadow-indigo-200 font-medium flex items-center gap-2 transition-colors">
+            <i class="fas fa-image"></i> Novo Banner
+        </button>
+    </div>
+    
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Loja (Tienda)</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option>BR VIVO STORE</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Operadora</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option>VIVO BRASIL</option>
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors flex justify-center items-center gap-2">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Preview</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nome da Campanha</th>
+                    <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">+18</th>
+                    <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">1653</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="w-16 h-8 bg-red-500 rounded flex items-center justify-center text-white text-xs font-bold shadow-inner">NETFLIX</div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-700 font-medium">NETFLIX_01_09_2026</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-500">NÃO</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-700">Ativo</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button class="text-gray-400 hover:text-indigo-600 transition-colors p-2"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">1652</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="w-16 h-8 bg-green-600 rounded flex items-center justify-center text-white text-xs font-bold shadow-inner">PREMIERE</div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-700 font-medium">PREMIERE_17_08_2026</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-500">NÃO</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-700">Ativo</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button class="text-gray-400 hover:text-indigo-600 transition-colors p-2"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+                    </div>
+
+                    <div x-show="currentView === 'documentacao'" x-cloak x-transition.opacity.duration.300ms>
+                        
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: Documentacao</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        
+                    </div>
+
+                    <div x-show="currentView === 'multimidia'" x-cloak x-transition.opacity.duration.300ms>
+                        
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: Multimidia</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        
+                    </div>
+
+                    <div x-show="currentView === 'categorias-loja'" x-cloak x-transition.opacity.duration.300ms>
+                        
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: Categorias Loja</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        
+                    </div>
+
+                    <div x-show="currentView === 'categorias-pno'" x-cloak x-transition.opacity.duration.300ms>
+                        
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: Categorias Pno</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        
+                    </div>
+
+                    <div x-show="currentView === 'banner-novo'" x-cloak x-transition.opacity.duration.300ms>
+                        
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: Banner Novo</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        
+                    </div>
+
+                    <div x-show="currentView === 'carrossel'" x-cloak x-transition.opacity.duration.300ms>
+                        
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: Carrossel</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        
+                    </div>
+
+                    <div x-show="currentView === 'ofertas'" x-cloak x-transition.opacity.duration.300ms>
+                        
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: Ofertas</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // Setup login function accessible by Alpine
+        window.login = function() {
+            // Can add effects here
+            document.dispatchEvent(new CustomEvent('alpine:init'));
             setTimeout(() => {
-                window.location.href = 'home.html';
-            }, 600);
+                document.querySelector('[x-data]').__x.$data.currentView = 'home';
+            }, 300);
         }
     </script>
 </body>
