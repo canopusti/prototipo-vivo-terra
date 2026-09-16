@@ -1,25 +1,40 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terra Vivo - Painel Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <style>
-        body { font-family: 'Inter', system-ui, sans-serif; background-color: #F3F4F6; }
-        [x-cloak] { display: none !important; }
-        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
-        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #4B5563; border-radius: 4px; }
-    </style>
-</head>
-<body x-data="{ currentView: 'login', sidebarOpen: true }">
-    
-    <!-- Login View -->
-    <div x-show="currentView === 'login'" x-cloak class="fixed inset-0 z-50 bg-gray-900">
-        
+import os
+
+prototype_data = {
+    "brand_name": "Terra Vivo",
+    "sidebar": [
+        {
+            "id": "menu-conteudos",
+            "title": "Conteúdos",
+            "icon": "fas fa-file-alt",
+            "items": [
+                {"id": "home", "title": "Lista de Serviços", "view": "home"}
+            ]
+        },
+        {
+            "id": "menu-categorias",
+            "title": "Categorias Globais",
+            "icon": "fas fa-tags",
+            "items": [
+                {"id": "categorias-loja", "title": "Loja", "view": "categorias-loja"},
+                {"id": "categorias-pno", "title": "PNO", "view": "categorias-pno"}
+            ]
+        },
+        {
+            "id": "menu-publicidade",
+            "title": "Publicidade",
+            "icon": "fas fa-bullhorn",
+            "items": [
+                {"id": "banners-lista", "title": "Lista de Banners", "view": "banners-lista"},
+                {"id": "banner-novo", "title": "Novo Banner", "view": "banner-novo"},
+                {"id": "carrossel", "title": "Carrossel", "view": "carrossel"}
+            ]
+        }
+    ]
+}
+
+views = {
+    "login": """
     <div class="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-50" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'); background-size: cover; background-position: center;">
         <div class="absolute inset-0 bg-indigo-900 opacity-80 mix-blend-multiply"></div>
         <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden z-10">
@@ -68,159 +83,8 @@
             </div>
         </div>
     </div>
-    
-    </div>
-
-    <!-- Main App Layout -->
-    <div x-show="currentView !== 'login'" x-cloak class="flex h-screen overflow-hidden">
-        
-        <!-- Sidebar -->
-        <aside class="bg-gray-900 text-white w-64 flex-shrink-0 flex flex-col transition-transform duration-300 shadow-2xl relative z-20"
-               :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen, 'absolute': true, 'md:relative': true, 'md:translate-x-0': sidebarOpen}">
-            
-            <div class="h-16 flex items-center px-6 bg-gray-950 border-b border-gray-800">
-                <h1 class="text-xl font-bold tracking-wider">TERRA <span class="text-indigo-400 font-light">VIVO</span></h1>
-            </div>
-
-            <div class="p-6 border-b border-gray-800">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-900/50">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-400">Administrador</p>
-                        <p class="text-sm font-semibold truncate">81021595</p>
-                    </div>
-                </div>
-            </div>
-
-            <nav class="flex-1 overflow-y-auto sidebar-scroll py-4">
-
-                <div class="px-4 mb-2">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Conteúdos</p>
-                    <ul class="space-y-1">
-
-                        <li>
-                            <button @click="currentView = 'home'" 
-                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                                    :class="currentView === 'home' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
-                                <span class="flex items-center gap-3">
-                                    <i class="fas fa-file-alt w-4 text-center opacity-70"></i>
-                                    Lista de Serviços
-                                </span>
-                            </button>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <div class="px-4 mb-2">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Categorias Globais</p>
-                    <ul class="space-y-1">
-
-                        <li>
-                            <button @click="currentView = 'categorias-loja'" 
-                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                                    :class="currentView === 'categorias-loja' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
-                                <span class="flex items-center gap-3">
-                                    <i class="fas fa-tags w-4 text-center opacity-70"></i>
-                                    Loja
-                                </span>
-                            </button>
-                        </li>
-
-                        <li>
-                            <button @click="currentView = 'categorias-pno'" 
-                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                                    :class="currentView === 'categorias-pno' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
-                                <span class="flex items-center gap-3">
-                                    <i class="fas fa-tags w-4 text-center opacity-70"></i>
-                                    PNO
-                                </span>
-                            </button>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <div class="px-4 mb-2">
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Publicidade</p>
-                    <ul class="space-y-1">
-
-                        <li>
-                            <button @click="currentView = 'banners-lista'" 
-                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                                    :class="currentView === 'banners-lista' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
-                                <span class="flex items-center gap-3">
-                                    <i class="fas fa-bullhorn w-4 text-center opacity-70"></i>
-                                    Lista de Banners
-                                </span>
-                            </button>
-                        </li>
-
-                        <li>
-                            <button @click="currentView = 'banner-novo'" 
-                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                                    :class="currentView === 'banner-novo' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
-                                <span class="flex items-center gap-3">
-                                    <i class="fas fa-bullhorn w-4 text-center opacity-70"></i>
-                                    Novo Banner
-                                </span>
-                            </button>
-                        </li>
-
-                        <li>
-                            <button @click="currentView = 'carrossel'" 
-                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                                    :class="currentView === 'carrossel' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
-                                <span class="flex items-center gap-3">
-                                    <i class="fas fa-bullhorn w-4 text-center opacity-70"></i>
-                                    Carrossel
-                                </span>
-                            </button>
-                        </li>
-
-                    </ul>
-                </div>
-
-            </nav>
-            <div class="p-4 bg-gray-950">
-                <button @click="currentView = 'login'" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
-                    <i class="fas fa-sign-out-alt"></i> Sair do Sistema
-                </button>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col h-screen overflow-hidden relative z-10" :class="{'md:ml-0': sidebarOpen}">
-            
-            <!-- Topbar -->
-            <header class="h-16 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 z-10">
-                <div class="flex items-center gap-4">
-                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100">
-                        <i class="fas fa-bars text-lg"></i>
-                    </button>
-                    <!-- Breadcrumbs (Mocked) -->
-                    <div class="hidden md:flex items-center text-sm text-gray-500">
-                        <span>Painel Admin</span>
-                        <i class="fas fa-chevron-right text-xs mx-2 text-gray-300"></i>
-                        <span class="text-indigo-600 font-medium" x-text="currentView.replace('-', ' ').toUpperCase()"></span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <button class="text-gray-400 hover:text-indigo-600 relative p-2">
-                        <i class="fas fa-bell"></i>
-                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Workspace -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 lg:p-8">
-                <div class="max-w-7xl mx-auto">
-
-                    <div x-show="currentView === 'home'" x-cloak x-transition.opacity.duration.300ms>
-                        
+    """,
+    "home": """
     <div class="mb-6 flex justify-between items-center">
         <h2 class="text-2xl font-bold text-gray-800">Serviços <span class="text-gray-400 font-normal">| Conteúdos</span></h2>
         <button @click="currentView = 'novo-pno'" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow shadow-indigo-200 font-medium flex items-center gap-2 transition-colors">
@@ -299,11 +163,8 @@
             </table>
         </div>
     </div>
-    
-                    </div>
-
-                    <div x-show="currentView === 'novo-pno'" x-cloak x-transition.opacity.duration.300ms>
-                        
+    """,
+    "novo-pno": """
     <div class="mb-6 flex justify-between items-center">
         <div class="flex items-center gap-3">
             <button @click="currentView = 'home'" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors shadow-sm">
@@ -362,11 +223,8 @@
             </form>
         </div>
     </div>
-    
-                    </div>
-
-                    <div x-show="currentView === 'edicao-pno'" x-cloak x-transition.opacity.duration.300ms>
-                        
+    """,
+    "edicao-pno": """
     <div x-data="{ tab: 'dados' }">
         <div class="mb-6 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -511,11 +369,8 @@
 
         </div>
     </div>
-    
-                    </div>
-
-                    <div x-show="currentView === 'banners-lista'" x-cloak x-transition.opacity.duration.300ms>
-                        
+    """,
+    "banners-lista": """
     <div class="mb-6 flex justify-between items-center">
         <h2 class="text-2xl font-bold text-gray-800">Publicidade <span class="text-gray-400 font-normal">| Gerenciar Banners</span></h2>
         <button @click="currentView = 'banner-novo'" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow shadow-indigo-200 font-medium flex items-center gap-2 transition-colors">
@@ -575,52 +430,151 @@
             </tbody>
         </table>
     </div>
+    """
+}
+
+# Empty states
+all_views = ["categorias-loja", "categorias-pno", "banner-novo", "carrossel"]
+for view_name in all_views:
+    if view_name not in views:
+        views[view_name] = f"""
+        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
+            <h2 class="text-xl font-medium text-gray-600">Tela: {view_name.replace('-', ' ').title()}</h2>
+            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
+        </div>
+        """
+
+html_content = """<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>""" + prototype_data['brand_name'] + """ - Painel Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: #F3F4F6; }
+        [x-cloak] { display: none !important; }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #4B5563; border-radius: 4px; }
+    </style>
+</head>
+<body x-data="{ currentView: 'login', sidebarOpen: true }">
     
-                    </div>
+    <!-- Login View -->
+    <div x-show="currentView === 'login'" x-cloak class="fixed inset-0 z-50 bg-gray-900">
+        """ + views["login"] + """
+    </div>
 
-                    <div x-show="currentView === 'categorias-loja'" x-cloak x-transition.opacity.duration.300ms>
-                        
-        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
-            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
-            <h2 class="text-xl font-medium text-gray-600">Tela: Categorias Loja</h2>
-            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
-        </div>
+    <!-- Main App Layout -->
+    <div x-show="currentView !== 'login'" x-cloak class="flex h-screen overflow-hidden">
         
-                    </div>
+        <!-- Sidebar -->
+        <aside class="bg-gray-900 text-white w-64 flex-shrink-0 flex flex-col transition-transform duration-300 shadow-2xl relative z-20"
+               :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen, 'absolute': true, 'md:relative': true, 'md:translate-x-0': sidebarOpen}">
+            
+            <div class="h-16 flex items-center px-6 bg-gray-950 border-b border-gray-800">
+                <h1 class="text-xl font-bold tracking-wider">TERRA <span class="text-indigo-400 font-light">VIVO</span></h1>
+            </div>
 
-                    <div x-show="currentView === 'categorias-pno'" x-cloak x-transition.opacity.duration.300ms>
-                        
-        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
-            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
-            <h2 class="text-xl font-medium text-gray-600">Tela: Categorias Pno</h2>
-            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
-        </div>
-        
+            <div class="p-6 border-b border-gray-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-900/50">
+                        <i class="fas fa-user-tie"></i>
                     </div>
-
-                    <div x-show="currentView === 'banner-novo'" x-cloak x-transition.opacity.duration.300ms>
-                        
-        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
-            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
-            <h2 class="text-xl font-medium text-gray-600">Tela: Banner Novo</h2>
-            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
-        </div>
-        
+                    <div>
+                        <p class="text-xs text-gray-400">Administrador</p>
+                        <p class="text-sm font-semibold truncate">81021595</p>
                     </div>
+                </div>
+            </div>
 
-                    <div x-show="currentView === 'carrossel'" x-cloak x-transition.opacity.duration.300ms>
-                        
-        <div class="h-64 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
-            <i class="fas fa-paint-roller text-4xl mb-4 text-gray-300"></i>
-            <h2 class="text-xl font-medium text-gray-600">Tela: Carrossel</h2>
-            <p class="mt-2 text-sm text-gray-400">Esta interface está sendo projetada.</p>
-        </div>
-        
+            <nav class="flex-1 overflow-y-auto sidebar-scroll py-4">
+"""
+
+for group in prototype_data["sidebar"]:
+    html_content += f"""
+                <div class="px-4 mb-2">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">{group['title']}</p>
+                    <ul class="space-y-1">
+"""
+    for item in group["items"]:
+        html_content += f"""
+                        <li>
+                            <button @click="currentView = '{item['view']}'" 
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                                    :class="currentView === '{item['view']}' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'">
+                                <span class="flex items-center gap-3">
+                                    <i class="{group['icon']} w-4 text-center opacity-70"></i>
+                                    {item['title']}
+                                </span>
+                            </button>
+                        </li>
+"""
+    html_content += """
+                    </ul>
+                </div>
+"""
+
+html_content += """
+            </nav>
+            <div class="p-4 bg-gray-950">
+                <button @click="currentView = 'login'" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
+                    <i class="fas fa-sign-out-alt"></i> Sair do Sistema
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden relative z-10" :class="{'md:ml-0': sidebarOpen}">
+            
+            <!-- Topbar -->
+            <header class="h-16 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                    <!-- Breadcrumbs (Mocked) -->
+                    <div class="hidden md:flex items-center text-sm text-gray-500">
+                        <span>Painel Admin</span>
+                        <i class="fas fa-chevron-right text-xs mx-2 text-gray-300"></i>
+                        <span class="text-indigo-600 font-medium" x-text="currentView.replace('-', ' ').toUpperCase()"></span>
                     </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-gray-400 hover:text-indigo-600 relative p-2">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                </div>
+            </header>
 
+            <!-- Workspace -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 lg:p-8">
+                <div class="max-w-7xl mx-auto">
+"""
+
+for view_id, view_html in views.items():
+    if view_id != "login":
+        html_content += f"""
+                    <div x-show="currentView === '{view_id}'" x-cloak x-transition.opacity.duration.300ms>
+                        {view_html}
+                    </div>
+"""
+
+html_content += """
                 </div>
             </main>
         </div>
     </div>
 </body>
 </html>
+"""
+
+with open('index.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("Generated HTML successfully.")
